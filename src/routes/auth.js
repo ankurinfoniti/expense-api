@@ -1,9 +1,9 @@
 const express = require("express");
-const bcrypt = require("bcrypt");
 
 const { loginValidation, signupValidation } = require("../utils/validator");
 const User = require("../models/user");
 const { getJwt } = require("../utils/jwt");
+const { comparePassword, hashPassword } = require("../utils/bcrypt");
 
 const authRouter = express.Router();
 
@@ -14,7 +14,7 @@ authRouter.post("/signup", async (req, res) => {
 
     // save records
     const { name, email, password } = req.body;
-    const hashedPassword = await bcrypt.hash(password, 10);
+    const hashedPassword = await hashPassword(password);
 
     const user = await User.create({ name, email, password: hashedPassword });
 
@@ -50,7 +50,7 @@ authRouter.post("/login", async (req, res) => {
       throw new Error("Invalid credentials");
     }
 
-    const isPasswordValid = await bcrypt.compare(password, user.password);
+    const isPasswordValid = await comparePassword(password, user.password);
 
     if (!isPasswordValid) {
       throw new Error("Invalid credentials");

@@ -48,4 +48,37 @@ function loginValidation(req) {
   }
 }
 
-module.exports = { loginValidation, signupValidation };
+function profileValidation(req) {
+  const { name } = req.body;
+
+  if (!name) {
+    throw new Error("Name is required");
+  }
+}
+
+function passwordValidation(req) {
+  const { password, confirmPassword } = req.body;
+
+  if (!password) {
+    throw new Error("Password is required");
+  }
+
+  if (!validator.isStrongPassword(password)) {
+    throw new Error("Password is not strong");
+  }
+
+  if (!confirmPassword) {
+    throw new Error("Confirm password is required");
+  }
+
+  if (password !== confirmPassword) {
+    throw new Error("Password and confirm password should be same");
+  }
+}
+
+module.exports = {
+  loginValidation,
+  passwordValidation,
+  profileValidation,
+  signupValidation,
+};
