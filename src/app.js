@@ -6,9 +6,11 @@ const sequelize = require("./config/database");
 const app = express();
 const port = process.env.SERVER_PORT;
 
-app.get("/hello", (req, res) => {
-  res.send("Hello World!");
-});
+app.use(express.json());
+
+const authRouter = require("./routes/auth");
+
+app.use("/", authRouter);
 
 async function connectDB() {
   try {
