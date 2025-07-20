@@ -76,7 +76,16 @@ function passwordValidation(req) {
   }
 }
 
+function expenseValidation(req) {
+  const { title } = req.body;
+
+  if (!title) {
+    throw new Error("Title is required");
+  }
+}
+
 module.exports = {
+  expenseValidation,
   loginValidation,
   passwordValidation,
   profileValidation,
